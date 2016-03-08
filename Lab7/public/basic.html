@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>City Finder</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<script>
+$(document).ready(function() {
+$( "#cityfield" ).keyup(function() {
+  var url = "../getcity?q="+$("#cityfield").val();
+  $.getJSON(url,function(data) {
+    var everything;
+    everything = "<ul>";
+    $.each(data, function(i,item) {
+      everything += "<li> "+data[i].city;
+    });
+    everything += "</ul>";
+    $("#txtHint").html(everything);
+  })
+  .done(function() { console.log('getJSON request succeeded!'); })
+  .fail(function(jqXHR, textStatus, errorThrown) { 
+    console.log('getJSON request failed! ' + textStatus); 
+    console.log("incoming "+jqXHR.responseText);
+  })
+  .always(function() { console.log('getJSON request ended!');
+  })
+  .complete(function() { console.log("complete"); });
+});
+$("#button").click(function(e){
+  var value = $("#cityfield").val();
+  console.log(value);
+  e.preventDefault();
+  $("#dispcity").text(value);
+  
+  var myurl= "https://api.wunderground.com/api/945d00f0db926f7b/geolookup/conditions/q/UT/";
+  myurl += value;
+  myurl += ".json";
+  console.log(myurl);
+  $.ajax({
+    url : myurl,
+    dataType : "jsonp",
+    success : function(parsed_json) {
+      var location = parsed_json['location']['city'];
+      var temp_string = parsed_json['current_observation']['temperature_string'];
+      var current_weather = parsed_json['current_observation']['weather'];
+      everything = "<ul>";
+      everything += "<li>Location: "+location;
+      everything += "<li>Temperature: "+temp_string;
+      everything += "<li>Weather: "+current_weather;
+      everything += "</ul>";
+      $("#weather").html(everything);
+    }
+  });
+});
+$("#button2").click(function(e){
+  var size = $("#dieSize").val();
+  var num = $("#numDice").val();
+  console.log(size+", "+num);
+  e.preventDefault();
+  
+  var myurl="https://rolz.org/api/?";
+  myurl+=num;
+  myurl+="d"+size;
+  myurl+=".json";
+  var yql_url = 'https://query.yahooapis.com/v1/public/yql';
+  console.log(myurl);
+  $.ajax({
+    url : yql_url,
+    data : {
+      q : 'SELECT * FROM json WHERE url="'+myurl+'"',
+      format : "json",
+      jsonCompact : "new",
+    },
+    dataType : "jsonp",
+    success : function(parsed_json) {
+      var result = parsed_json.query.results.json.result;
+      var details = parsed_json.query.results.json.details;
+      everything = "<ul>";
+      everything += "<li>Result: "+result;
+      everything += "<li>Details: "+details;
+      everything += "</ul>";
+      $("#dice").html(everything);
+    }
+  });
+});
+});
+</script>
+
+</head>
+<body>
+<form>
+Enter A Utah City: <input type="text" id="cityfield" value=""><br>
+Suggestion: <span id="txtHint">Empty</span>
+<input id="button" type="submit" value="Submit">
+</form>
+<p>City</p>
+<textarea id="dispcity">No City</textarea>
+<p>Current Weather</p>
+<div id="weather">No weather</div>
+<br>
+<p>Roll some dice!</p>
+Sides of dice: <input type="text" id="dieSize" value="6"><br>
+Number of dice: <input type="text" id="numDice" value="1"><br>
+<input id="button2" type="button" value="Roll">
+<div id="dice">Waiting for roll</div>
+<p>
+</p><ol>
+<li> <a href="test1.html"> Test1</a>
+</li><li> <a href="test2.txt"> Test2</a>
+</li><li> <a href="test3.gif"> Test3</a>
+</li><li> <a href="test4.jpg"> Test4</a>
+</li></ol>
+</body>
+</html>
