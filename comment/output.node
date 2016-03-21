@@ -1,0 +1,8 @@
+nohup: ignoring input
+
+> comment@0.0.0 start /home/bitnami/comment
+> node ./bin/www
+
+Connected
+[0mGET / [32m200 [0m7.851 ms - 646[0m
+[0mGET /javascripts/comments.js [32m200 [0m3.015 ms - 1526[0m

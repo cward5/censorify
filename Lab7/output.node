@@ -1,0 +1,6 @@
+nohup: ignoring input
+
+> Lab7@0.0.0 start /home/bitnami/Lab7
+> node ./bin/www
+
+[0mGET / [36m304 [0m10.265 ms - -[0m
